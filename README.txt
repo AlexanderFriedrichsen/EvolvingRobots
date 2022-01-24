@@ -7,3 +7,5 @@ Pybullet Physics:
 - updating its acceleration based on the forces that are acting on it using f = ma, and
 - updating the new position and orientation of each link using its new acceleration.
 
+joints and links:
+- Only the first joint in a robot has an absolute position. Each other joint hasa position relative to its upstream joint.
