@@ -7,17 +7,14 @@ import numpy as np
 # import sys
 # print(sys.version)
 
-
-
 physicsClient = p.connect(p.GUI)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0,0,-9.8)
 
-# Make a plane for objeccts to rest on
+# Make a plane for objects to rest on, world for objects, body of robot
 planeId = p.loadURDF("plane.urdf")
-p.loadSDF("world.sdf")
+worldId = p.loadSDF("world.sdf")
 robotId = p.loadURDF("body.urdf")
-
 
 backLegSensorValues = np.zeros(10000)
 pyrosim.Prepare_To_Simulate(robotId)
@@ -29,5 +26,4 @@ for i in range(10000):
 p.disconnect()
 
 #sensor outputs
-np.save("data/backlegSensorValues.npy", backLegSensorValues)
-
+#np.save("backlegSensorValues.npy", backLegSensorValues)
