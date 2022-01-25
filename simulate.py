@@ -1,7 +1,9 @@
+from turtle import back
 import pybullet as p
 import pybullet_data
 import pyrosim.pyrosim as pyrosim
 import time 
+import numpy as np
 # import sys
 # print(sys.version)
 
@@ -16,6 +18,8 @@ planeId = p.loadURDF("plane.urdf")
 p.loadSDF("world.sdf")
 robotId = p.loadURDF("body.urdf")
 
+
+backLegSensorValues = np.zeros(10000)
 pyrosim.Prepare_To_Simulate(robotId)
 for i in range(10000):
     p.stepSimulation()
@@ -23,3 +27,7 @@ for i in range(10000):
     time.sleep(0.01)
     print(i)
 p.disconnect()
+
+#sensor outputs
+np.save("data/backlegSensorValues.npy", backLegSensorValues)
+
