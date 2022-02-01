@@ -11,7 +11,7 @@ def Create_World():
     x = -2
     y = 2
     z = .5
-    # when starting same position, why did it go x and not y?
+    
     pyrosim.Send_Cube(name="Box", pos=[x,y,z] , size=[length,width,height])
 
     pyrosim.End()
@@ -34,17 +34,18 @@ def Create_Robot():
     legWidth = 1
 
     #create BackLeg
-    pyrosim.Send_Joint(name = "Torso_BackLeg" , parent= "Torso" , child = "BackLeg" , type = "revolute", position = [0,-.5,1])
-    pyrosim.Send_Cube(name="BackLeg", pos=[0,-.5,-.5] , size=[legLength,legWidth,legHeight])
+    pyrosim.Send_Joint(name="Torso_BackLeg" , parent="Torso", child="BackLeg",
+                       type = "revolute", position = [0,-.5,1])
+    pyrosim.Send_Cube(name="BackLeg", pos=[0,-.5,-.5] , size=[legLength, legWidth, legHeight])
     
     #create FrontLeg
-    pyrosim.Send_Joint(name = "Torso_FrontLeg" , parent= "Torso" , child = "FrontLeg" , type = "revolute", position = [0,.5,1])
+    pyrosim.Send_Joint(name = "Torso_FrontLeg" , parent= "Torso" , child = "FrontLeg", 
+                       type = "revolute", position = [0,.5,1])
     pyrosim.Send_Cube(name="FrontLeg", pos=[0,.5,-.5] , size=[legLength,legWidth,legHeight])
    
 
     
     pyrosim.End()
 
-if __name__ == '__main__':
-    Create_World()
-    Create_Robot()
+Create_World()
+Create_Robot()
