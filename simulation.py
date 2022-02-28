@@ -5,6 +5,7 @@ import pybullet as p
 import pybullet_data
 import time
 
+
 class SIMULATION:
 
     def __init__(self):
@@ -20,10 +21,11 @@ class SIMULATION:
             p.stepSimulation()
 
             self.robot.Sense(i)
+            self.robot.Think()
             self.robot.Act(i)
 
             time.sleep(c.SLEEP_RATE)
-            print(i)
+            #print(i)
 
     def __del__(self):
         p.disconnect()
