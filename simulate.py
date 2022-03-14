@@ -1,5 +1,7 @@
-import constants as c
 from simulation import SIMULATION
+import sys
 
-simulation = SIMULATION()
+s = sys.argv[1]
+simulation = SIMULATION(s)
 simulation.Run()
+simulation.Get_Fitness()

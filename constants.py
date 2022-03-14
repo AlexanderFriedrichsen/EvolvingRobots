@@ -10,4 +10,6 @@ AMPLITUDE = np.pi/4.0
 FREQUENCY = 20
 PHASE_OFFSET = 0
 
+NUMBER_OF_GENERATIONS = 20
+
 targetAngles = np.linspace(-np.pi/4, np.pi/4, NB_LOOPS)

@@ -8,10 +8,16 @@ import time
 
 class SIMULATION:
 
-    def __init__(self):
-        self.physicsClient = p.connect(p.GUI)
+    def __init__(self, mode):
+        self.directOrGUI = mode
+        if mode == 'GUI':
+            p.connect(p.GUI)
+        else:
+            p.connect(p.DIRECT)
+
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
-        p.setGravity(0,0,c.EARTH_GRAVITY)
+        
+        p.setGravity(0, 0, c.EARTH_GRAVITY)
 
         self.world = WORLD()
         self.robot = ROBOT()
@@ -24,8 +30,11 @@ class SIMULATION:
             self.robot.Think()
             self.robot.Act(i)
 
-            time.sleep(c.SLEEP_RATE)
-            #print(i)
+            if self.directOrGUI == 'GUI':
+                time.sleep(c.SLEEP_RATE)
+
+    def Get_Fitness(self):
+        self.robot.Get_Fitness()
 
     def __del__(self):
         p.disconnect()
