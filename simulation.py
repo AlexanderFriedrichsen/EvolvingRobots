@@ -8,9 +8,10 @@ import time
 
 class SIMULATION:
 
-    def __init__(self, mode):
-        self.directOrGUI = mode
-        if mode == 'GUI':
+    def __init__(self, directOrGUI, solutionID):
+        self.solutionID = solutionID
+        self.directOrGUI = directOrGUI
+        if directOrGUI == 'GUI':
             p.connect(p.GUI)
         else:
             p.connect(p.DIRECT)
@@ -20,7 +21,7 @@ class SIMULATION:
         p.setGravity(0, 0, c.EARTH_GRAVITY)
 
         self.world = WORLD()
-        self.robot = ROBOT()
+        self.robot = ROBOT(self.solutionID)
        
     def Run(self):
         for i in range(c.NB_LOOPS):
