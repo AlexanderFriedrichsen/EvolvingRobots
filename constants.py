@@ -10,8 +10,13 @@ AMPLITUDE = np.pi/4.0
 FREQUENCY = 20
 PHASE_OFFSET = 0
 
-NUMBER_OF_GENERATIONS = 20
+NUMBER_OF_GENERATIONS = 10
 
-targetAngles = np.linspace(-np.pi/4, np.pi/4, NB_LOOPS)
+targetAngles = np.linspace(-np.pi, np.pi, NB_LOOPS)
 
 populationSize = 10
+
+numberSensorNeurons = 9
+numberMotorNeurons = 8
+
+motorJointRange = .2
