@@ -9,24 +9,25 @@ class PARALLEL_HILL_CLIMBER:
         os.system('del fitness*.nndf')
         self.nextAvailableID = 0
         self.parents = {}
+        #self.children = {}
         for i in range(c.populationSize):
             self.parents[i] = SOLUTION(self.nextAvailableID)
             self.nextAvailableID += 1
 
-
     def Evolve(self):
-        # for parent in self.parents:
-        #     parent.Evaluate("GUI")
+        # self.parent.Evaluate("GUI")
         self.Evaluate(self.parents)
-        for currentGeneration in range(c.NUMBER_OF_GENERATIONS):
+        for currentGeneration in range(c.numberOfGenerations):
             self.Evolve_For_One_Generation()
-    
+
+
     def Evolve_For_One_Generation(self):
         self.Spawn()
         self.Mutate()
         self.Evaluate(self.children)
         self.Print()
         self.Select()
+
 
     def Spawn(self):
         self.children = {}
@@ -58,6 +59,7 @@ class PARALLEL_HILL_CLIMBER:
                 bestFit = self.parents[key].fitness
                 bestkey = key
         self.parents[bestkey].Start_Simulation("GUI")
+
 
     def Evaluate(self, solutions):
         for s in range(len(solutions)):

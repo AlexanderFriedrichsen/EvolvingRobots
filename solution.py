@@ -1,65 +1,72 @@
 import numpy as np
 import pyrosim.pyrosim as pyrosim
+import random
 import os
 import time
-import random
 import constants as c
 
 class SOLUTION:
     def __init__(self, myID):
         self.myID = myID
-        self.weights = (np.random.rand(c.numberSensorNeurons,c.numberMotorNeurons) * 2) - 1
+        self.weights = np.random.rand(c.numSensorNeurons,c.numMotorNeurons)
+        self.weights = self.weights * 2 -1
 
     def Evaluate(self, directOrGUI):
         pass
 
     def Create_World(self):
         pyrosim.Start_SDF("world.sdf")
-        # size
         length = 1
-        height = 1
         width = 1
-        # position  - a link start with its exact center at these cords.
+        height = 1
         x = -3
         y = 3
-        z = .5
-        
-        pyrosim.Send_Cube(name="Box", pos=[x,y,z] , size=[length,width,height])
+        z = 0.5
+        pyrosim.Send_Cube(name="Box", pos=[x, y, z], size=[length, width, height])
 
         pyrosim.End()
 
-    def Create_Body(self):
+    def Generate_Body(self):
+        # Create Robot
         pyrosim.Start_URDF("body.urdf")
-        pyrosim.Send_Cube(name="Torso", pos=[0,0,1] , size=[1,1,1])
-        
+        length = 1
+        width = 1
+        height = 1
+        x = 0
+        y = 0
+        z = 1
+        # Add Torso
+        pyrosim.Send_Cube(name="Torso", pos=[x, y, z], size=[length, width, height])
         # Create Legs
         pyrosim.Send_Cube(name="FrontLeg", pos=[0, .5, 0], size=[0.2, 1, 0.2])
+        pyrosim.Send_Cube(name="LowerFrontLeg", pos=[0, 0, -.5], size=[.2, .2, 1])
+        pyrosim.Send_Joint(name="Torso_FrontLeg", parent="Torso", child="FrontLeg",type="revolute", position="0 0.5 1", jointAxis = "1 0 0")
+        pyrosim.Send_Joint(name="FrontLeg_LowerFrontLeg", parent="FrontLeg", child="LowerFrontLeg",type="revolute", position="0 1 0", jointAxis = "1 0 0")
+
         pyrosim.Send_Cube(name="BackLeg", pos=[0, -.5, 0], size=[0.2, 1, 0.2])
         pyrosim.Send_Cube(name="LeftLeg", pos=[-.5, 0, 0], size=[1, 0.2, 0.2])
         pyrosim.Send_Cube(name="RightLeg", pos=[0.5, 0, 0], size=[1, 0.2, 0.2])
-        
+
         # Create Lower Legs
-        pyrosim.Send_Cube(name="LowerFrontLeg", pos=[0, 0, -.5], size=[.2, .2, 1])
         pyrosim.Send_Cube(name="LowerRightLeg", pos=[0, 0, -.5], size=[.2, .2, 1]) 
         pyrosim.Send_Cube(name="LowerLeftLeg", pos=[0, 0, -.5], size=[.2, .2, 1])
         pyrosim.Send_Cube(name="LowerBackLeg", pos=[0, 0, -.5], size=[.2, .2, 1])
         
         # Create Joints Upper
-        pyrosim.Send_Joint(name="Torso_FrontLeg", parent="Torso", child="FrontLeg",type="revolute", position="0 0.5 1", jointAxis = "1 0 0")
+        
         pyrosim.Send_Joint(name="Torso_BackLeg", parent="Torso", child="BackLeg",type="revolute", position="0 -0.5 1", jointAxis = "1 0 0")
         pyrosim.Send_Joint(name="Torso_LeftLeg", parent="Torso", child="LeftLeg",type="revolute", position="-0.5 0 1", jointAxis = "0 1 0")
         pyrosim.Send_Joint(name="Torso_RightLeg", parent="Torso", child="RightLeg",type="revolute", position="0.5 0 1", jointAxis = "0 1 0")
-        
         # create Joints Lower
-        pyrosim.Send_Joint(name="FrontLeg_LowerFrontLeg", parent="FrontLeg", child="LowerFrontLeg",type="revolute", position="0 1 0", jointAxis = "1 0 0")
+        
         pyrosim.Send_Joint(name="BackLeg_LowerBackLeg", parent="BackLeg", child="LowerBackLeg",type="revolute", position="0 -1 0", jointAxis = "1 0 0")
         pyrosim.Send_Joint(name="LeftLeg_LowerLeftLeg", parent="LeftLeg", child="LowerLeftLeg",type="revolute", position="-1 0 0", jointAxis = "0 1 0")
         pyrosim.Send_Joint(name="RightLeg_LowerRightLeg", parent="RightLeg", child="LowerRightLeg", type="revolute", position="1 0 0", jointAxis = "0 1 0")
-        
+
         pyrosim.End()
 
-
-    def Create_Brain(self):
+    def Generate_Brain(self):
+        # Create World
         pyrosim.Start_NeuralNetwork("brain"+str(self.myID)+".nndf")
         pyrosim.Send_Sensor_Neuron(name=0, linkName="Torso")
         pyrosim.Send_Sensor_Neuron(name=1, linkName="FrontLeg")
@@ -82,23 +89,20 @@ class SOLUTION:
         pyrosim.Send_Motor_Neuron(name=15, jointName="LeftLeg_LowerLeftLeg")
         pyrosim.Send_Motor_Neuron(name=16, jointName="RightLeg_LowerRightLeg")
 
-        # pyrosim.Send_Synapse(sourceNeuronName = 0, targetNeuronName = 3, weight = -1.0)
-        # pyrosim.Send_Synapse(sourceNeuronName = 1, targetNeuronName = 3, weight = -1.0)
-        # pyrosim.Send_Synapse(sourceNeuronName = 0, targetNeuronName = 4, weight = -1.0)
-        # pyrosim.Send_Synapse(sourceNeuronName = 1, targetNeuronName = 4, weight = -1.0)
 
-        # loop over the names of the neurons
-        for currentRow in range(c.numberSensorNeurons):
+        # loop over the names
+        for currentRow in range(c.numSensorNeurons):
             # loop over the motors
-            for currentColumn in range(c.numberMotorNeurons):
-                pyrosim.Send_Synapse(sourceNeuronName=currentRow, targetNeuronName=currentColumn+c.numberSensorNeurons, weight=self.weights[currentRow][currentColumn])
-
-
+            for currentColumn in range(c.numMotorNeurons):
+                pyrosim.Send_Synapse(sourceNeuronName=currentRow,
+                                     targetNeuronName=currentColumn + c.numSensorNeurons,
+                                     weight=self.weights[currentRow][currentColumn])
+        
         pyrosim.End()
-    
+
     def Mutate(self):
-        randomRow = random.randint(0, c.numberSensorNeurons-1)
-        randomColumn = random.randint(0, c.numberMotorNeurons-1)
+        randomRow = random.randint(0, c.numSensorNeurons -1)
+        randomColumn = random.randint(0, c.numMotorNeurons-1)
         self.weights[randomRow,randomColumn] = random.random() * 2 -1
 
     def Set_ID(self):
@@ -106,8 +110,8 @@ class SOLUTION:
 
     def Start_Simulation(self, directOrGUI):
         self.Create_World()
-        self.Create_Body()
-        self.Create_Brain()
+        self.Generate_Body()
+        self.Generate_Brain()
         os.system("start /B python simulate.py " + directOrGUI + " " + str(self.myID))
 
 

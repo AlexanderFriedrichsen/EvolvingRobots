@@ -16,7 +16,6 @@ class NEURAL_NETWORK:
 
             self.Digest(line)
 
-        #print(self.synapses)
         f.close()
 
     def Print(self):
@@ -28,7 +27,7 @@ class NEURAL_NETWORK:
         self.Print_Motor_Neuron_Values()
 
         print("")
-    
+
     def Update(self):
         for neuronName in self.neurons:
             if self.neurons[neuronName].Is_Sensor_Neuron():
@@ -36,9 +35,10 @@ class NEURAL_NETWORK:
             else:
                 self.neurons[neuronName].Update_Hidden_Or_Motor_Neuron(self.neurons, self.synapses)
 
+
     def Get_Neuron_Names(self):
         return self.neurons
-    
+
     def Is_Motor_Neuron(self, neuronName):
         return self.neurons[neuronName].Is_Motor_Neuron()
 
@@ -47,8 +47,6 @@ class NEURAL_NETWORK:
 
     def Get_Value_Of(self, neuronName):
         return self.neurons[neuronName].Get_Value()
-
-
 # ---------------- Private methods --------------------------------------
 
     def Add_Neuron_According_To(self,line):

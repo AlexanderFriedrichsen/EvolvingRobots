@@ -60,69 +60,71 @@ def Get_Touch_Sensor_Value_For_Link(linkName):
 
     return touchValue
 
-def Prepare_Link_Dictionary(bodyID):
+def Prepare_Link_Dictionary(urdfFileName):
 
     global linkNamesToIndices
 
     linkNamesToIndices = {}
 
-    for jointIndex in range( 0 , p.getNumJoints(bodyID) ):
+    linkIndex = -1
 
-        jointInfo = p.getJointInfo( bodyID , jointIndex )
+    f = open(urdfFileName,"r")
 
-        jointName = jointInfo[1]
+    for line in f.readlines():
 
-        jointName = jointName.decode("utf-8")
+        if "link name" in line:
 
-        jointName = jointName.split("_")
+            line = line.split('"')
 
-        linkName = jointName[1]
+            linkName = line[1]
 
-        linkNamesToIndices[linkName] = jointIndex
+            linkNamesToIndices[linkName] = linkIndex
 
-        if jointIndex==0:
+            linkIndex = linkIndex + 1
 
-           rootLinkName = jointName[0]
+    f.close()
 
-           linkNamesToIndices[rootLinkName] = -1 
-
-def Prepare_Joint_Dictionary(bodyID):
+def Prepare_Joint_Dictionary(urdfFileName):
 
     global jointNamesToIndices
 
     jointNamesToIndices = {}
 
-    for jointIndex in range( 0 , p.getNumJoints(bodyID) ):
+    jointIndex = 0
 
-        jointInfo = p.getJointInfo( bodyID , jointIndex )
+    f = open(urdfFileName,"r")
 
-        jointName = jointInfo[1].decode('UTF-8')
+    for line in f.readlines():
 
-        jointNamesToIndices[jointName] = jointIndex
+        if "joint name" in line:
 
-def Prepare_To_Simulate(bodyID):
+            line = line.split('"')
 
-    Prepare_Link_Dictionary(bodyID)
+            jointName = line[1]
 
-    Prepare_Joint_Dictionary(bodyID)
+            jointNamesToIndices[jointName] = jointIndex
+
+            jointIndex = jointIndex + 1
+
+    f.close()
+
+def Prepare_To_Simulate(urdfFileName):
+
+    Prepare_Link_Dictionary(urdfFileName)
+
+    Prepare_Joint_Dictionary(urdfFileName)
 
 def Send_Cube(name="default",pos=[0,0,0],size=[1,1,1]):
 
     global availableLinkIndex
-
-    global links
 
     if filetype == SDF_FILETYPE:
 
         Start_Model(name,pos)
 
         link = LINK_SDF(name,pos,size)
-
-        links.append(link)
     else:
         link = LINK_URDF(name,pos,size)
-
-        links.append(link)
 
     link.Save(f)
 
@@ -207,10 +209,6 @@ def Start_SDF(filename):
 
     sdf.Save_Start_Tag(f)
 
-    global links
-
-    links = []
-
 def Start_URDF(filename):
 
     global availableLinkIndex
@@ -234,10 +232,6 @@ def Start_URDF(filename):
     urdf = URDF()
 
     urdf.Save_Start_Tag(f)
-
-    global links
-
-    links = []
 
 def Start_Model(modelName,pos):
 

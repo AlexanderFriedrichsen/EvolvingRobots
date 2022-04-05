@@ -1,4 +1,3 @@
-from constants import NUMBER_OF_GENERATIONS
 from solution import SOLUTION
 import constants as c
 import copy
@@ -10,11 +9,10 @@ class HILL_CLIMBER:
 
     def Evolve(self):
         self.parent.Evaluate("GUI")
-        for currentGeneration in range(c.NUMBER_OF_GENERATIONS):
+        for currentGeneration in range(c.numberOfGenerations):
             self.Evolve_For_One_Generation()
         self.Show_Best()
-    
-    
+
     def Evolve_For_One_Generation(self):
         self.Spawn()
         self.Mutate()
