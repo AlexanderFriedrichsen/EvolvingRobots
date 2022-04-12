@@ -31,3 +31,4 @@ x_i represents the variables to be optimized, with lower and upper bounds on eac
 I read through the getting started guide on Pymoo:  have also started the definition for our specific problem above
 I am interested to know if my second chosen optimization function is the easiest to implement, as I forsee the implementation already being quite tricky.
 I am looking for feedback anad will reach out as per recommendation for this project choice this week.
+
