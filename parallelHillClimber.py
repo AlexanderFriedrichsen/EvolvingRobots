@@ -1,4 +1,4 @@
-from solution import SOLUTION
+from solution_hex import SOLUTION_HEX
 import constants as c
 import copy
 import os
@@ -11,7 +11,7 @@ class PARALLEL_HILL_CLIMBER:
         self.parents = {}
         #self.children = {}
         for i in range(c.populationSize):
-            self.parents[i] = SOLUTION(self.nextAvailableID)
+            self.parents[i] = SOLUTION_HEX(self.nextAvailableID)
             self.nextAvailableID += 1
 
     def Evolve(self):
