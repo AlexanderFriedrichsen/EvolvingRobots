@@ -16,19 +16,13 @@ class SOLUTION_HEX:
 
     def Create_World(self):
         pyrosim.Start_SDF("world.sdf")
-        length = 1
-        width = 1
-        height = 1
-        x = -3
-        y = 3
-        z = 0.5
-        pyrosim.Send_Cube(name="Box", pos=[x, y, z], size=[length, width, height])
-
+        #pyrosim.Send_Cube(name="Box", pos=[x, y, z], size=[length, width, height])
+        pyrosim.Send_Sphere(name="BowlingBall" , pos=[-3,+3,0.5] , size=[0.5])
         pyrosim.End()
 
     def Generate_Body(self):
         # Create Robot
-        #here is where we will be adding 2 limbs. Do we want to reposition the other limbs as well? Perhaps, but not initially
+        # here is where we will be adding 2 limbs. Do we want to reposition the other limbs as well? Perhaps, but not initially
 
         pyrosim.Start_URDF("body.urdf")
         length = 1
@@ -48,8 +42,8 @@ class SOLUTION_HEX:
 
         #let's try displacing by .4 on either side of the middle front leg
         #this might need to be reversed?
-        pyrosim.Send_Cube(name="frontLeftLeg", pos=[0, .1, 0], size=[0.2, 1, 0.2])
-        pyrosim.Send_Cube(name="frontRightLeg", pos=[0, .9, 0], size=[0.2, 1, 0.2])
+        #pyrosim.Send_Cube(name="frontLeftLeg", pos=[0, .5, .4], size=[0.2, 1, 0.2])
+        #pyrosim.Send_Cube(name="frontRightLeg", pos=[0, .5, -.4], size=[0.2, 1, 0.2])
         
         # Create Lower Legs
         pyrosim.Send_Cube(name="LowerFrontLeg", pos=[0, 0, -.5], size=[.2, .2, 1])
@@ -58,8 +52,8 @@ class SOLUTION_HEX:
         pyrosim.Send_Cube(name="LowerRightLeg", pos=[0, 0, -.5], size=[.2, .2, 1]) 
         
         #We also need to add lower parts for the front legs - it seems like they can all remain the same
-        pyrosim.Send_Cube(name="LowerFrontLeftLeg", pos=[0, 0, -.5], size=[.2, .2, 1])
-        pyrosim.Send_Cube(name="LowerFrontRightLeg", pos=[0, 0, -.5], size=[.2, .2, 1])
+        #pyrosim.Send_Cube(name="LowerFrontLeftLeg", pos=[0, 0, -.5], size=[.2, .2, 1])
+        #pyrosim.Send_Cube(name="LowerFrontRightLeg", pos=[0, 0, -.5], size=[.2, .2, 1])
 
         # Create Joints Upper
         pyrosim.Send_Joint(name="Torso_FrontLeg", parent="Torso", child="FrontLeg",type="revolute", position="0 0.5 1", jointAxis = "1 0 0")
@@ -68,8 +62,8 @@ class SOLUTION_HEX:
         pyrosim.Send_Joint(name="Torso_RightLeg", parent="Torso", child="RightLeg",type="revolute", position="0.5 0 1", jointAxis = "0 1 0")
 
         #Also adding joints... what should the position be?
-        pyrosim.Send_Joint(name="Torso_FrontLeftLeg", parent="Torso", child="FrontLeftLeg",type="revolute", position="0 0.5 1", jointAxis = "1 0 0")
-        pyrosim.Send_Joint(name="Torso_FrontRightLeg", parent="Torso", child="FrontRightLeg",type="revolute", position="0 0.5 1", jointAxis = "1 0 0")
+        #pyrosim.Send_Joint(name="Torso_FrontLeftLeg", parent="Torso", child="FrontLeftLeg",type="revolute", position="0 0.5 1", jointAxis = "1 0 0")
+        #pyrosim.Send_Joint(name="Torso_FrontRightLeg", parent="Torso", child="FrontRightLeg",type="revolute", position="0 0.5 1", jointAxis = "1 0 0")
 
         # Create Joints Lower
         pyrosim.Send_Joint(name="FrontLeg_LowerFrontLeg", parent="FrontLeg", child="LowerFrontLeg",type="revolute", position="0 1 0", jointAxis = "1 0 0")
@@ -78,8 +72,8 @@ class SOLUTION_HEX:
         pyrosim.Send_Joint(name="RightLeg_LowerRightLeg", parent="RightLeg", child="LowerRightLeg", type="revolute", position="1 0 0", jointAxis = "0 1 0")
    
         # ok finally we need to add lower joints.. positions need to be tested as well
-        pyrosim.Send_Joint(name="FrontLeftLeg_LowerFrontLeftLeg", parent="FrontLeftLeg", child="LowerFrontLeftLeg",type="revolute", position="0 1 0", jointAxis = "1 0 0")
-        pyrosim.Send_Joint(name="FrontRightLeg_LowerFrontRightLeg", parent="FrontRightLeg", child="LowerFrontRightLeg",type="revolute", position="0 1 0", jointAxis = "1 0 0")
+        #pyrosim.Send_Joint(name="FrontLeftLeg_LowerFrontLeftLeg", parent="FrontLeftLeg", child="LowerFrontLeftLeg",type="revolute", position="0 1 0", jointAxis = "1 0 0")
+        #pyrosim.Send_Joint(name="FrontRightLeg_LowerFrontRightLeg", parent="FrontRightLeg", child="LowerFrontRightLeg",type="revolute", position="0 1 0", jointAxis = "1 0 0")
         pyrosim.End()
 
     def Generate_Brain(self):
