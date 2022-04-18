@@ -15,6 +15,10 @@ class PARALLEL_HILL_CLIMBER:
             # self.parents[i] = SOLUTION_HEX(self.nextAvailableID)
             self.parents[i] = SOLUTION(self.nextAvailableID)
             self.nextAvailableID += 1
+        # moved
+        self.parents[0].Create_World()
+        self.parents[0].Generate_Body()
+
 
     def Evolve(self):
         # self.parent.Evaluate("GUI")
