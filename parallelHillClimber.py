@@ -3,13 +3,19 @@ from solution import SOLUTION
 import constants as c
 import copy
 import os
+import numpy as np
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
         os.system('del brain*.nndf')
         os.system('del fitness*.nndf')
+        os.system('w fitness**.nndf')
         self.nextAvailableID = 0
         self.parents = {}
+
+        #p population # columns, g generation # rows
+        self.fitnessMatrix = np.zeros((c.populationSize, c.numberOfGenerations))
+
         #self.children = {}
         for i in range(c.populationSize):
             # self.parents[i] = SOLUTION_HEX(self.nextAvailableID)
@@ -25,6 +31,10 @@ class PARALLEL_HILL_CLIMBER:
         self.Evaluate(self.parents)
         for currentGeneration in range(c.numberOfGenerations):
             self.Evolve_For_One_Generation()
+            
+            for p in range(c.populationSize):
+                individualFitness = self.parents.get(p).fitness
+                self.fitnessMatrix.itemset((p, currentGeneration), individualFitness)
 
 
     def Evolve_For_One_Generation(self):
@@ -48,7 +58,7 @@ class PARALLEL_HILL_CLIMBER:
 
     def Select(self):
         for key in range(len(self.parents)):
-            if self.parents[key].fitness > self.children[key].fitness:
+            if self.parents[key].fitness < self.children[key].fitness:
                 self.parents[key] = self.children[key]
 
     def Print(self):
@@ -72,3 +82,12 @@ class PARALLEL_HILL_CLIMBER:
             solutions[s].Start_Simulation("DIRECT")
         for s in range(len(solutions)):
             solutions[s].Wait_For_Simulation_To_End()
+
+    def Fitness(self):
+        #add the current gen and pop # to the correct row-col in the matrix
+        pass
+        
+
+    def SaveFitness(self):
+        np.savetxt("data/fitnessMatrix" + str(c.numberLegs) + ".txt", self.fitnessMatrix)
+        np.save("data/fitnessMatrix" + str(c.numberLegs) +".npy", self.fitnessMatrix)
