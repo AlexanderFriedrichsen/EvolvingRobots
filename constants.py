@@ -18,12 +18,12 @@ LEG_MOTOR_MAX_FORCE = 20
 # time sleep rate
 SLEEP_RATE = 1/480 
 
-numberOfGenerations = 10
+numberOfGenerations = 100
 populationSize = 10
 
 motorJointRange = .3
 
-numberLegs = 8
+numberLegs = 4
 
 #before hex: 8 and 9
 # we are making our code modular to the number of legs.
